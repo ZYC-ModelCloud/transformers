@@ -65,10 +65,10 @@ class GPTQConfigTest(unittest.TestCase):
 
     @require_optimum
     def test_optimum_config(self):
-        from optimum.gptq import GPTQQuantizer
+        from optimum.gptq import GPTQModelQuantizer
 
         config = GPTQConfig(bits=2)
-        optimum_config = GPTQQuantizer.from_dict(config.to_dict_optimum())
+        optimum_config = GPTQModelQuantizer.from_dict(config.to_dict_optimum())
         self.assertEqual(optimum_config.bits, config.bits)
         new_config = GPTQConfig.from_dict_optimum(optimum_config.to_dict())
         self.assertEqual(optimum_config.bits, new_config.bits)
