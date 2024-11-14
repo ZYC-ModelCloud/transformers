@@ -173,11 +173,9 @@ class GPTQTest(unittest.TestCase):
         from gptqmodel.utils.importer import select_quant_linear
 
         QuantLinear = select_quant_linear(
-            use_triton=False,
             desc_act=self.desc_act,
             group_size=self.group_size,
             bits=self.bits,
-            disable_exllamav2=True,
         )
         self.assertTrue(self.quantized_model.transformer.h[0].mlp.dense_4h_to_h.__class__ == QuantLinear)
 
