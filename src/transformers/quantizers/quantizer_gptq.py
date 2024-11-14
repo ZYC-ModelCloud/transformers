@@ -44,9 +44,9 @@ class GptqHfQuantizer(HfQuantizer):
 
     def __init__(self, quantization_config: QuantizationConfigMixin, **kwargs):
         super().__init__(quantization_config, **kwargs)
-        from optimum.gptq import GPTQQuantizer
+        from optimum.gptq import GPTQModelQuantizer
 
-        self.optimum_quantizer = GPTQQuantizer.from_dict(self.quantization_config.to_dict_optimum())
+        self.optimum_quantizer = GPTQModelQuantizer.from_dict(self.quantization_config.to_dict_optimum())
 
     def validate_environment(self, *args, **kwargs):
         gptq_supports_cpu = version.parse(importlib.metadata.version("gptqmodel")) >= version.parse("1.2.1")
