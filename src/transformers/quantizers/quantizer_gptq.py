@@ -49,16 +49,16 @@ class GptqHfQuantizer(HfQuantizer):
         self.optimum_quantizer = GPTQQuantizer.from_dict(self.quantization_config.to_dict_optimum())
 
     def validate_environment(self, *args, **kwargs):
-        gptq_supports_cpu = version.parse(importlib.metadata.version("auto-gptq")) > version.parse("0.4.2")
+        gptq_supports_cpu = version.parse(importlib.metadata.version("gptqmodel")) >= version.parse("1.2.1")
         if not gptq_supports_cpu and not torch.cuda.is_available():
             raise RuntimeError("GPU is required to quantize or run quantize model.")
         elif not (is_optimum_available() and is_gptqmodel_available()):
             raise ImportError(
                 "Loading a GPTQ quantized model requires optimum (`pip install optimum`) and gptqmodel library (`pip install -v gptqmodel --no-build-isolation`)"
             )
-        elif version.parse(importlib.metadata.version("gptqmodel")) < version.parse("0.4.2"):
+        elif version.parse(importlib.metadata.version("gptqmodel")) < version.parse("1.2.1"):
             raise ImportError(
-                "You need a version of gptqmodel >= 0.4.2 to use GPTQ: `pip install --upgrade -v gptqmodel --no-build-isolation`"
+                "You need a version of gptqmodel >= 1.2.1 to use GPTQ: `pip install --upgrade -v gptqmodel --no-build-isolation`"
             )
 
     def update_torch_dtype(self, torch_dtype: "torch.dtype") -> "torch.dtype":
