@@ -720,10 +720,10 @@ class GPTQConfig(QuantizationConfigMixin):
                 )
             elif self.exllama_config["version"] == ExllamaVersion.TWO:
                 optimum_version = version.parse(importlib.metadata.version("optimum"))
-                autogptq_version = version.parse(importlib.metadata.version("auto_gptq"))
-                if optimum_version <= version.parse("1.13.2") or autogptq_version <= version.parse("0.4.2"):
+                gptqmodel_version = version.parse(importlib.metadata.version("gptqmodel"))
+                if optimum_version <= version.parse("1.13.2") or gptqmodel_version <= version.parse("0.4.2"):
                     raise ValueError(
-                        f"You need optimum > 1.13.2 and auto-gptq > 0.4.2 . Make sure to have that version installed - detected version : optimum {optimum_version} and autogptq {autogptq_version}"
+                        f"You need optimum > 1.13.2 and auto-gptq > 0.4.2 . Make sure to have that version installed - detected version : optimum {optimum_version} and gptqmodel {gptqmodel_version}"
                     )
         if self.modules_in_block_to_quantize is not None:
             optimum_version = version.parse(importlib.metadata.version("optimum"))

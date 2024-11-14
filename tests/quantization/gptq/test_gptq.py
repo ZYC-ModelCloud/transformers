@@ -22,7 +22,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, GPTQConfig
 from transformers.testing_utils import (
     is_torch_available,
     require_accelerate,
-    require_auto_gptq,
+    require_gptqmodel,
     require_optimum,
     require_torch_gpu,
     require_torch_multi_gpu,
@@ -76,7 +76,7 @@ class GPTQConfigTest(unittest.TestCase):
 
 @slow
 @require_optimum
-@require_auto_gptq
+@require_gptqmodel
 @require_torch_gpu
 class GPTQTest(unittest.TestCase):
     model_name = "bigscience/bloom-560m"
@@ -170,14 +170,13 @@ class GPTQTest(unittest.TestCase):
         Simple test to check if the model conversion has been done correctly by checking on
         the class type of the linear layers of the converted models
         """
-        from auto_gptq.utils.import_utils import dynamically_import_QuantLinear
+        from gptqmodel.utils.importer import select_quant_linear
 
-        QuantLinear = dynamically_import_QuantLinear(
+        QuantLinear = select_quant_linear(
             use_triton=False,
             desc_act=self.desc_act,
             group_size=self.group_size,
             bits=self.bits,
-            disable_exllama=not self.use_exllama,
             disable_exllamav2=True,
         )
         self.assertTrue(self.quantized_model.transformer.h[0].mlp.dense_4h_to_h.__class__ == QuantLinear)
@@ -268,7 +267,7 @@ class GPTQTestDeviceMapExllama(GPTQTest):
 
 @slow
 @require_optimum
-@require_auto_gptq
+@require_gptqmodel
 @require_torch_gpu
 @require_accelerate
 class GPTQTestActOrderExllama(unittest.TestCase):
@@ -343,7 +342,7 @@ class GPTQTestActOrderExllama(unittest.TestCase):
 
 @slow
 @require_optimum
-@require_auto_gptq
+@require_gptqmodel
 @require_torch_gpu
 @require_accelerate
 class GPTQTestExllamaV2(unittest.TestCase):
